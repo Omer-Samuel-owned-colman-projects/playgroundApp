@@ -1,0 +1,29 @@
+{
+  "name": "playgroundApp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omer32211/playgroundApp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/omer32211/playgroundApp/issues"
+  },
+  "homepage": "https://github.com/omer32211/playgroundApp#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mongoose": "^9.1.1"
+  }
+}
