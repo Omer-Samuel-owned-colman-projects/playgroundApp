@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const MONGO_URI = process.env.MONGO_URI || process.env.MONGODB_URI || 'mongodb://admin:password@localhost:27017/playgroundApp?authSource=admin';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://admin:password@localhost:27017/playgroundApp?authSource=admin';
 
 const connectDB = () => {
   mongoose.connect(MONGO_URI)

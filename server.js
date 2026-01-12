@@ -11,7 +11,7 @@ const createApp = () => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
   });
 
-  app.use('/api', postRoutes);
+  app.use('/api/post', postRoutes);
 
   return app;
 };

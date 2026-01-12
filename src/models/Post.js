@@ -5,7 +5,7 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  uploaderId: {
+  sender: {
     type: String,
     required: true
   }
