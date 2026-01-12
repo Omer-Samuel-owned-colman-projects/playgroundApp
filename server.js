@@ -1,5 +1,6 @@
 const express = require('express');
 const postRoutes = require('./src/routes/postRoutes');
+const commentRoutes = require('./src/routes/commentRoutes');
 
 const createApp = () => {
   const app = express();
@@ -12,6 +13,7 @@ const createApp = () => {
   });
 
   app.use('/api/post', postRoutes);
+  app.use('/api/comment', commentRoutes);
 
   return app;
 };
