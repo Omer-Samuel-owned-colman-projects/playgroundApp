@@ -1,0 +1,82 @@
+### API Base URL
+@baseUrl = http://localhost:3000
+
+###########################################
+# Health Check
+###########################################
+
+### Health Check
+GET {{baseUrl}}/health
+
+###########################################
+# Post Endpoints
+###########################################
+
+### Get All Posts
+GET {{baseUrl}}/api/post
+
+### Get All Posts Filtered by Sender
+GET {{baseUrl}}/api/post?sender={{sender}}
+
+### Get Post by ID
+GET {{baseUrl}}/api/post/{{postId}}
+
+### Create Post
+POST {{baseUrl}}/api/post
+Content-Type: application/json
+
+{
+  "content": "feel free to put any content you want",
+  "sender": "every user is fine"
+}
+
+### Update Post
+PUT {{baseUrl}}/api/post/{{postId}}
+Content-Type: application/json
+
+{
+  "content": "Updated post content",
+  "sender": "every user is fine"
+}
+
+### Delete Post
+DELETE {{baseUrl}}/api/post/{{postId}}
+
+###########################################
+# Comment Endpoints
+###########################################
+
+### Get All Comments
+GET {{baseUrl}}/api/comment
+
+### Get Comments Filtered by Post ID
+GET {{baseUrl}}/api/comment?postId={{postIdForComment}}
+
+### Get Comments Filtered by Sender
+GET {{baseUrl}}/api/comment?sender={{sender}}
+
+### Get Comments Filtered by Post ID and Sender
+GET {{baseUrl}}/api/comment?postId={{postIdForComment}}&sender={{sender}}
+
+### Create Comment
+POST {{baseUrl}}/api/comment
+Content-Type: application/json
+
+{
+  "message": "This is a comment message",
+  "sender": "every user is fine",
+  "postId": "{{postIdForComment}}"
+}
+
+### Update Comment
+PUT {{baseUrl}}/api/comment/{{commentId}}
+Content-Type: application/json
+
+{
+  "message": "Updated comment message",
+  "sender": "every user is fine",
+  "postId": "{{postIdForComment}}"
+}
+
+### Delete Comment
+DELETE {{baseUrl}}/api/comment/{{commentId}}
