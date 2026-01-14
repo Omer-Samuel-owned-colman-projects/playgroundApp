@@ -1,7 +1,9 @@
 import express, { Express } from 'express';
+import swaggerUi from 'swagger-ui-express';
 import postRoutes from './src/routes/postRoutes';
 import commentRoutes from './src/routes/commentRoutes';
 import connectDB from './src/db';
+import swaggerSpec from './swagger';
 
 const createApp = (): Express => {
   connectDB();
@@ -9,6 +11,12 @@ const createApp = (): Express => {
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+  app.get("/api-docs.json", (_req, res) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpec);
+  });
 
   app.get('/health', (_req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
