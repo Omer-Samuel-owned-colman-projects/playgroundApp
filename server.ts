@@ -1,14 +1,16 @@
-const express = require('express');
-const postRoutes = require('./src/routes/postRoutes');
-const commentRoutes = require('./src/routes/commentRoutes');
+import express, { Express } from 'express';
+import postRoutes from './src/routes/postRoutes';
+import commentRoutes from './src/routes/commentRoutes';
+import connectDB from './src/db';
 
-const createApp = () => {
+const createApp = (): Express => {
+  connectDB();
   const app = express();
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
 
-  app.get('/health', (req, res) => {
+  app.get('/health', (_req, res) => {
     res.json({ status: 'OK', timestamp: new Date().toISOString() });
   });
 
@@ -18,7 +20,7 @@ const createApp = () => {
   return app;
 };
 
-const startServer = () => {
+const startServer = (): void => {
   const PORT = process.env.PORT || 3000;
   const app = createApp();
   app.listen(PORT, () => {
@@ -26,4 +28,4 @@ const startServer = () => {
   });
 };
 
-module.exports = { createApp, startServer };
+export { createApp, startServer };
