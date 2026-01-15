@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import PostController from '../controllers/postController';
+import authMiddleware from '../middleware/auth';
 
 const router: Router = express.Router();
 const postController = new PostController();
@@ -63,6 +64,8 @@ router.get('/:id', postController.getPostById.bind(postController));
  *   post:
  *     summary: Create a new post
  *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -71,14 +74,10 @@ router.get('/:id', postController.getPostById.bind(postController));
  *             type: object
  *             required:
  *               - content
- *               - sender
  *             properties:
  *               content:
  *                 type: string
  *                 example: This is a post content
- *               sender:
- *                 type: string
- *                 example: user123
  *     responses:
  *       201:
  *         description: Post created successfully
@@ -92,8 +91,14 @@ router.get('/:id', postController.getPostById.bind(postController));
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
-router.post('', postController.createPost.bind(postController));
+router.post('', authMiddleware, postController.createPost.bind(postController));
 
 /**
  * @swagger
@@ -101,6 +106,8 @@ router.post('', postController.createPost.bind(postController));
  *   put:
  *     summary: Update a post
  *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -116,14 +123,10 @@ router.post('', postController.createPost.bind(postController));
  *             type: object
  *             required:
  *               - content
- *               - sender
  *             properties:
  *               content:
  *                 type: string
  *                 example: Updated post content
- *               sender:
- *                 type: string
- *                 example: user123
  *     responses:
  *       200:
  *         description: Post updated successfully
@@ -137,6 +140,18 @@ router.post('', postController.createPost.bind(postController));
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - You can only update your own posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       404:
  *         description: Post not found
  *         content:
@@ -144,7 +159,7 @@ router.post('', postController.createPost.bind(postController));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', postController.updatePost.bind(postController));
+router.put('/:id', authMiddleware, postController.updatePost.bind(postController));
 
 /**
  * @swagger
@@ -152,6 +167,8 @@ router.put('/:id', postController.updatePost.bind(postController));
  *   delete:
  *     summary: Delete a post
  *     tags: [Posts]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -169,6 +186,18 @@ router.put('/:id', postController.updatePost.bind(postController));
  *               properties:
  *                 _id:
  *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - You can only delete your own posts
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       404:
  *         description: Post not found
  *         content:
@@ -176,6 +205,6 @@ router.put('/:id', postController.updatePost.bind(postController));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', postController.deletePost.bind(postController));
+router.delete('/:id', authMiddleware, postController.deletePost.bind(postController));
 
 export default router;

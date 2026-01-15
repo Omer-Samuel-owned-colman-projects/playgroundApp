@@ -4,8 +4,16 @@ const MONGO_URI = process.env.MONGO_URI || 'mongodb://admin:password@localhost:2
 
 const connectDB = (): void => {
   mongoose.connect(MONGO_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch((err: Error) => console.error('MongoDB connection error:', err));
+    .then(() => {
+      if (process.env.NODE_ENV !== 'test') {
+        console.log('Connected to MongoDB');
+      }
+    })
+    .catch((err: Error) => {
+      if (process.env.NODE_ENV !== 'test') {
+        console.error('MongoDB connection error:', err)
+      }
+    });
 };
 
 export default connectDB;

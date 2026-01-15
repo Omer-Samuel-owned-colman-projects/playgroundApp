@@ -27,26 +27,26 @@ describe('user API', () => {
   test('should register a new user successfully', async () => {
     const response = await request(app)
       .post('/api/user/register')
-      .send(usersData[0])
-      .expect(201);
+      .send(usersData[0]);
 
-    expect(response.body).toHaveProperty('user');
-    expect(response.body).toHaveProperty('accessToken');
-    expect(response.body).toHaveProperty('refreshToken');
-    expect(response.body.user.email).toBe(usersData[0].email);
-    expect(response.body.user).not.toHaveProperty('password');
-    expect(response.body.user._id).toBeDefined();
-    expect(response.body.user.refreshToken).toBeDefined();
-    expect(response.body.user.createdAt).toBeDefined();
-    expect(response.body.user.updatedAt).toBeDefined();
+      testUser = {
+        email: usersData[0].email,
+        password: usersData[0].password,
+        _id: response.body.user._id,
+        accessToken: response.body.accessToken,
+        refreshToken: response.body.refreshToken
+      };
 
-    testUser = {
-      email: usersData[0].email,
-      password: usersData[0].password,
-      _id: response.body.user._id,
-      accessToken: response.body.accessToken,
-      refreshToken: response.body.refreshToken
-    };
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('user');
+      expect(response.body).toHaveProperty('accessToken');
+      expect(response.body).toHaveProperty('refreshToken');
+      expect(response.body.user.email).toBe(usersData[0].email);
+      expect(response.body.user).not.toHaveProperty('password');
+      expect(response.body.user._id).toBeDefined();
+      expect(response.body.user.refreshToken).toBeDefined();
+      expect(response.body.user.createdAt).toBeDefined();
+      expect(response.body.user.updatedAt).toBeDefined();
   });
 
   test('should return 400 if email is missing on register', async () => {
@@ -92,6 +92,14 @@ describe('user API', () => {
     expect(response.body.user).not.toHaveProperty('password');
     expect(response.body.accessToken).toBeDefined();
     expect(response.body.refreshToken).toBeDefined();
+
+    if (!testUser) {
+      testUser = {
+        email: usersData[0].email,
+        password: usersData[0].password,
+        _id: response.body.user._id,
+      };
+    }
 
     testUser.accessToken = response.body.accessToken;
     testUser.refreshToken = response.body.refreshToken;
@@ -176,7 +184,6 @@ describe('user API', () => {
   });
 
   test('should refresh access token successfully', async () => {
-    // Login again to get a fresh token
     const loginResponse = await request(app)
       .post('/api/user/login')
       .send(usersData[0])

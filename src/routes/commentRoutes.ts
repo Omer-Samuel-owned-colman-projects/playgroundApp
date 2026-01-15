@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import CommentController from '../controllers/commentController';
+import authMiddleware from '../middleware/auth';
 
 const router: Router = express.Router();
 const commentController = new CommentController();
@@ -39,6 +40,8 @@ router.get('', commentController.getAllComments.bind(commentController));
  *   post:
  *     summary: Create a new comment
  *     tags: [Comments]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -47,15 +50,11 @@ router.get('', commentController.getAllComments.bind(commentController));
  *             type: object
  *             required:
  *               - message
- *               - sender
  *               - postId
  *             properties:
  *               message:
  *                 type: string
  *                 example: This is a comment
- *               sender:
- *                 type: string
- *                 example: user123
  *               postId:
  *                 type: string
  *                 example: 507f1f77bcf86cd799439011
@@ -72,8 +71,14 @@ router.get('', commentController.getAllComments.bind(commentController));
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  */
-router.post('', commentController.createComment.bind(commentController));
+router.post('', authMiddleware, commentController.createComment.bind(commentController));
 
 /**
  * @swagger
@@ -81,6 +86,8 @@ router.post('', commentController.createComment.bind(commentController));
  *   put:
  *     summary: Update a comment
  *     tags: [Comments]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -96,15 +103,11 @@ router.post('', commentController.createComment.bind(commentController));
  *             type: object
  *             required:
  *               - message
- *               - sender
  *               - postId
  *             properties:
  *               message:
  *                 type: string
  *                 example: Updated comment message
- *               sender:
- *                 type: string
- *                 example: user123
  *               postId:
  *                 type: string
  *                 example: 507f1f77bcf86cd799439011
@@ -121,6 +124,18 @@ router.post('', commentController.createComment.bind(commentController));
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Error'
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - You can only update your own comments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       404:
  *         description: Comment not found
  *         content:
@@ -128,7 +143,7 @@ router.post('', commentController.createComment.bind(commentController));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.put('/:id', commentController.updateComment.bind(commentController));
+router.put('/:id', authMiddleware, commentController.updateComment.bind(commentController));
 
 /**
  * @swagger
@@ -136,6 +151,8 @@ router.put('/:id', commentController.updateComment.bind(commentController));
  *   delete:
  *     summary: Delete a comment
  *     tags: [Comments]
+ *     security:
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -153,6 +170,18 @@ router.put('/:id', commentController.updateComment.bind(commentController));
  *               properties:
  *                 _id:
  *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       403:
+ *         description: Forbidden - You can only delete your own comments
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
  *       404:
  *         description: Comment not found
  *         content:
@@ -160,6 +189,6 @@ router.put('/:id', commentController.updateComment.bind(commentController));
  *             schema:
  *               $ref: '#/components/schemas/Error'
  */
-router.delete('/:id', commentController.deleteComment.bind(commentController));
+router.delete('/:id', authMiddleware, commentController.deleteComment.bind(commentController));
 
 export default router;
