@@ -1,16 +1,17 @@
-const Comment = require('../models/Comment');
-const DefaultController = require('./defaultController');
+import { Request, Response } from 'express';
+import Comment from '../models/Comment';
+import DefaultController from './defaultController';
 
 class CommentController extends DefaultController {
   constructor() {
     super(Comment);
   }
 
-  async getAllComments(req, res) {
+  async getAllComments(req: Request, res: Response): Promise<Response> {
     return super.get(req, res);
   }
 
-  async createComment(req, res) {
+  async createComment(req: Request, res: Response): Promise<Response> {
     const { message, sender, postId } = req.body;
     if (!message || !sender || !postId) {
       return res.status(400).json({ error: 'message, sender, and postId are required' });
@@ -18,7 +19,7 @@ class CommentController extends DefaultController {
     return super.post(req, res);
   }
 
-  async updateComment(req, res) {
+  async updateComment(req: Request, res: Response): Promise<Response> {
     const { message, sender, postId } = req.body;
     if (!message || !sender || !postId) {
       return res.status(400).json({ error: 'message, sender, and postId are required' });
@@ -26,9 +27,9 @@ class CommentController extends DefaultController {
     return super.put(req, res);
   }
 
-  async deleteComment(req, res) {
+  async deleteComment(req: Request, res: Response): Promise<Response> {
     return super.del(req, res);
   }
 }
 
-module.exports = CommentController;
+export default CommentController;
