@@ -6,7 +6,7 @@ const swaggerDefinition = {
   info: {
     title: 'Playground App API',
     version: '1.0.0',
-    description: 'API documentation for Playground App - Posts and Comments management',
+    description: 'API documentation for Playground App - Posts, Comments, and User management',
     contact: {
       name: 'API Support',
     },
@@ -18,6 +18,14 @@ const swaggerDefinition = {
     },
   ],
   components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        description: 'Enter JWT token'
+      }
+    },
     schemas: {
       Post: {
         type: 'object',
@@ -73,6 +81,38 @@ const swaggerDefinition = {
             type: 'string',
             description: 'Associated Post ID',
             example: '507f1f77bcf86cd799439011',
+          },
+          createdAt: {
+            type: 'string',
+            format: 'date-time',
+            description: 'Creation timestamp',
+          },
+          updatedAt: {
+            type: 'string',
+            format: 'date-time',
+            description: 'Last update timestamp',
+          },
+        },
+      },
+      User: {
+        type: 'object',
+        required: ['email'],
+        properties: {
+          _id: {
+            type: 'string',
+            description: 'User ID',
+            example: '507f1f77bcf86cd799439013',
+          },
+          email: {
+            type: 'string',
+            format: 'email',
+            description: 'User email address',
+            example: 'user@example.com',
+          },
+          refreshToken: {
+            type: 'string',
+            description: 'Refresh token',
+            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
           },
           createdAt: {
             type: 'string',

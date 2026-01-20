@@ -8,9 +8,9 @@
     "start": "node dist/index.js",
     "dev": "ts-node index.ts",
     "dev:watch": "nodemon --exec ts-node index.ts",
-    "test": "jest --forceExit",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
+    "test": "jest --forceExit --runInBand",
+    "test:watch": "jest --forceExit --runInBand --watch",
+    "test:coverage": "jest --forceExit --runInBand --coverage",
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down"
   },
@@ -27,7 +27,11 @@
   },
   "homepage": "https://github.com/omer32211/playgroundApp#readme",
   "dependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "bcryptjs": "^3.0.3",
     "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.1.1",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"

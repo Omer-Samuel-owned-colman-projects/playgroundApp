@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import postRoutes from './src/routes/postRoutes';
 import commentRoutes from './src/routes/commentRoutes';
+import userRoutes from './src/routes/userRoutes';
 import connectDB from './src/db';
 import swaggerSpec from './swagger';
 
@@ -24,6 +25,7 @@ const createApp = (): Express => {
 
   app.use('/api/post', postRoutes);
   app.use('/api/comment', commentRoutes);
+  app.use('/api/user', userRoutes);
 
   return app;
 };
